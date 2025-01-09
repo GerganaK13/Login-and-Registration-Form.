@@ -1,47 +1,61 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
-import java.awt.event.*;
 
-public class login extends JFrame{
-    private JButton loginButtonButton;
-    private JPanel panel;
-    private JTextField textField1TextField;
-    private JPasswordField passwordfielPasswordField;
-    private JCheckBox agreeToTermsCheckBoxCheckBox;
-    private JLabel warning;
+public class LoginForm {
+    public JPanel panel;
+    private JTextField textField1;
+    private JPasswordField passwordField1;
+    private JTextField emailtextField2;
+    private JCheckBox iAgreeToTermsCheckBox;
+    private JButton loginButton;
     private JLabel pic;
+    private JLabel username;
+    private JLabel password;
+    private JLabel email;
 
-    public login() {
-        setSize(500,500);
-        setContentPane(panel);
-        setEnabled(false);
-
-        textField1TextField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                if (textField1TextField.getText().length() <= 5){
-                    warning.setForeground(Color.RED);
-                    warning.setText("username can't be smaller than 5 characters.");
-                  textField1TextField.requestFocus();
-                }else{
-                    warning.setText(" ");
-                }
-            }
-        });
-        loginButtonButton.addActionListener(new ActionListener() {
+    public LoginForm() {
+        loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-    if (passwordfielPasswordField.getText().equals("password")){
-                    warning.setForeground(Color.GREEN);
-                    warning.setText("bravo!");
-                }else{
-                    warning.setForeground(Color.RED);
-                    warning.setText("wrong!");
+                String usernameInput = textField1.getText();
+                String emailInput = emailtextField2.getText();
+                String passwordInput = new String(passwordField1.getPassword());
+                if (!isValidUsername(usernameInput)) {
+                    JOptionPane.showMessageDialog(panel, "Username must have at least 5 characters.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
+                if (!isValidEmail(emailInput)) {
+                    JOptionPane.showMessageDialog(panel, "Invalid email format.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (!isValidPassword(passwordInput)) {
+                    JOptionPane.showMessageDialog(panel, "Password must have 8+ characters, at least one uppercase letter, and one number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (!iAgreeToTermsCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(panel, "You must agree to the terms and conditions.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(panel, "Registration Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+    }
+
+    private boolean isValidUsername(String username) {
+        return username.length() >= 5;
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
+    }
+
+    private boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
+        return password.matches(passwordRegex);
     }
 }
