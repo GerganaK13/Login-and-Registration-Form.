@@ -1,0 +1,16 @@
+import javax.swing.*;
+public class Main {
+public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame frame = new JFrame("Registration Form");
+                frame.setContentPane(new LoginForm().panel); 
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setPreferredSize(new java.awt.Dimension(400, 500)); 
+                frame.pack();
+                frame.setVisible(true); 
+            }
+        });
+    }
+}
